@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const Aikotobar = () => {
+const Aikotobar: React.FC = () => {
   const firstWords = [
     "夜の",
     "ただただ",
@@ -201,7 +201,8 @@ const Aikotobar = () => {
   const [result, setResult] = useState("");
   const [kinds, setKinds] = useState(0);
 
-  const arrayRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const arrayRandom = (arr: string[]): string =>
+    arr[Math.floor(Math.random() * arr.length)];
 
   const generateResult = () => {
     setResult(
@@ -215,11 +216,13 @@ const Aikotobar = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(result);
-    document.getElementById("copy").innerText = "コピーしました！";
-    setTimeout(
-      () => (document.getElementById("copy").innerText = "コピー"),
-      1000
-    );
+    const copyBtn = document.getElementById("copy");
+    if (copyBtn) {
+      copyBtn.innerText = "コピーしました！";
+      setTimeout(() => {
+        if (copyBtn) copyBtn.innerText = "コピー";
+      }, 1000);
+    }
   };
 
   useEffect(() => {
@@ -247,7 +250,7 @@ const Aikotobar = () => {
         <button
           id="btn"
           onClick={generateResult}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
         >
           作成
         </button>
@@ -261,7 +264,7 @@ const Aikotobar = () => {
         <button
           id="copy"
           onClick={copyToClipboard}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
         >
           コピー
         </button>
