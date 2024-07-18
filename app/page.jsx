@@ -16,6 +16,7 @@ import {
   AlertTitle,
 } from "@mui/material";
 
+
 const words = [
   "空",
   "海",
