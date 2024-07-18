@@ -16,8 +16,6 @@ import {
   AlertTitle,
 } from "@mui/material";
 
-import "tailwindcss/tailwind.css";
-
 const words = [
   "空",
   "海",
