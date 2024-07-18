@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-// Update the import statement for Card, CardContent, CardHeader, CardTitle, Button, InputLabel, MenuItem, FormControl, Select, TextField, Alert, AlertTitle
 import {
   Card,
   CardContent,
@@ -17,10 +16,8 @@ import {
   AlertTitle,
 } from "@mui/material";
 
-// Update the import statement for GlobalStyles from '@mui/styled-engine'
-import { GlobalStyles } from "@mui/styled-engine";
+import "tailwindcss/tailwind.css";
 
-// 100語の単語リスト（実際のアプリケーションではもっと多様な単語を用意します）
 const words = [
   "空",
   "海",
@@ -127,10 +124,8 @@ const words = [
 const particles = ["は", "が", "を", "に", "で", "と", "や", "の"];
 const conjunctions = ["そして", "しかし", "それから", "だから", "また"];
 
-// ジャンルリスト
 const genres = ["日常", "自然", "仕事", "趣味", "ファンタジー"];
 
-// phrasePasswordを生成する関数
 const generatePhrasePassword = () => {
   const shuffled = [...words].sort(() => 0.5 - Math.random());
   const selected = shuffled.slice(0, 5);
@@ -146,7 +141,6 @@ const generatePhrasePassword = () => {
       phrase +=
         word + particles[Math.floor(Math.random() * particles.length)] + " ";
       if (Math.random() < 0.5) {
-        // 50%の確率で接続詞を挿入
         phrase +=
           conjunctions[Math.floor(Math.random() * conjunctions.length)] + " ";
       }
@@ -162,7 +156,6 @@ const PasswordSharingApp = () => {
   const [sharedWithPerson, setSharedWithPerson] = useState("");
 
   useEffect(() => {
-    // 仮のデータをロード
     const now = new Date();
     const fiveMonthsAgo = new Date(now.setMonth(now.getMonth() - 5));
     setPhrasePasswords([
@@ -198,65 +191,70 @@ const PasswordSharingApp = () => {
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto bg-white">
-      <h1 className="text-2xl font-bold mb-4">
-        言葉で遊び、絆で守る、合言葉生成アプリ
-      </h1>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="p-4 max-w-md mx-auto bg-white text-black text-left">
+        <h1 className="text-2xl font-bold mb-4">
+          言葉で遊び、絆で守る、個人間を合言葉で認証しあうアプリ
+        </h1>
 
-      <div className="mb-4 flex gap-2">
-        <FormControl variant="outlined" className="w-[180px]">
-          <InputLabel>ジャンルを選択</InputLabel>
-          <Select
-            value={selectedGenre}
-            onChange={(e) => setSelectedGenre(e.target.value)}
-            label="ジャンルを選択"
+        <div className="mb-4 flex justify-center gap-4">
+          <FormControl variant="outlined" className="w-[200px]">
+            <InputLabel>ジャンルを選択</InputLabel>
+            <Select
+              value={selectedGenre}
+              onChange={(e) => setSelectedGenre(e.target.value)}
+              label="ジャンルを選択"
+            >
+              {genres.map((genre) => (
+                <MenuItem key={genre} value={genre}>
+                  {genre}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            variant="outlined"
+            type="text"
+            value={sharedWithPerson}
+            onChange={(e) => setSharedWithPerson(e.target.value)}
+            placeholder="誰と共有しますか？"
+            className="flex-grow"
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCreatePassword}
           >
-            {genres.map((genre) => (
-              <MenuItem key={genre} value={genre}>
-                {genre}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
-          variant="outlined"
-          type="text"
-          value={sharedWithPerson}
-          onChange={(e) => setSharedWithPerson(e.target.value)}
-          placeholder="誰と共有しますか？"
-          className="flex-grow"
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleCreatePassword}
-        >
-          新しい合言葉を作成
-        </Button>
-      </div>
+            新しい合言葉を作成
+          </Button>
+        </div>
 
-      <div>
-        <h2 className="text-xl font-semibold mb-2">あなたの合言葉：</h2>
-        {phrasePasswords.map((pass) => (
-          <Card key={pass.id} className="mb-2">
-            <CardHeader
-              title={`${pass.genre} - ${pass.sharedWith}との合言葉`}
-            />
-            <CardContent>
-              <p className="break-words mb-2">{pass.phrasePassword}</p>
-              <p className="text-sm text-gray-600">
-                最終更新: {pass.lastUpdated.toLocaleDateString()}
-              </p>
-              {(new Date() - pass.lastUpdated) / (1000 * 60 * 60 * 24 * 30) >=
-                5 && (
-                <Alert severity="error" className="mt-2">
-                  <AlertTitle>更新が必要です</AlertTitle>
-                  この合言葉は5ヶ月間更新されていません。セキュリティのため、新しい合言葉を生成することをおすすめします。
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+        <div>
+          <h2 className="text-xl font-semibold mb-2">あなたの合言葉：</h2>
+          {phrasePasswords.map((pass) => (
+            <Card
+              key={pass.id}
+              className="mb-4 p-4 bg-gray-800 text-white rounded-lg border-2 border-gray-900"
+            >
+              <CardHeader
+                title={`${pass.genre} - ${pass.sharedWith}との合言葉`}
+              />
+              <CardContent>
+                <p className="break-words mb-2">{pass.phrasePassword}</p>
+                <p className="text-sm text-gray-400">
+                  最終更新: {pass.lastUpdated.toLocaleDateString()}
+                </p>
+                {(new Date() - pass.lastUpdated) / (1000 * 60 * 60 * 24 * 30) >=
+                  5 && (
+                  <Alert severity="error" className="mt-2">
+                    <AlertTitle>更新が必要です</AlertTitle>
+                    この合言葉は5ヶ月間更新されていません。セキュリティのため、新しい合言葉を生成することをおすすめします。
+                  </Alert>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
